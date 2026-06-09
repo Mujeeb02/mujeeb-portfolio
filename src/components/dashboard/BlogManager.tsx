@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, List, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { BlogList } from './BlogList';
-import { BlogForm } from './BlogForm';
+import BlogEditor from './editor/BlogEditor';
 
 type TabType = 'list' | 'create' | 'edit';
 
@@ -85,14 +85,14 @@ export const BlogManager = () => {
                         <BlogList onEdit={handleEdit} />
                     )}
                     {activeTab === 'create' && (
-                        <BlogForm
+                        <BlogEditor
                             mode="create"
                             onSave={handleSave}
                             onCancel={handleCancel}
                         />
                     )}
                     {activeTab === 'edit' && editingPostId && (
-                        <BlogForm
+                        <BlogEditor
                             mode="edit"
                             postId={editingPostId}
                             onSave={handleSave}
