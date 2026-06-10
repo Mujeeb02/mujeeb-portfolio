@@ -40,13 +40,21 @@ export const viewport: Viewport = {
   themeColor: "#00ff00",
 };
 
+import { Caveat } from 'next/font/google';
+
+const caveat = Caveat({ 
+  subsets: ['latin'],
+  variable: '--font-caveat',
+  display: 'swap',
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={caveat.variable}>
       <body suppressHydrationWarning>
         <AppProviders>{children}</AppProviders>
       </body>

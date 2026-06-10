@@ -40,7 +40,7 @@ const Blog = () => {
   });
 
   return (
-    <section className="py-20">
+    <section className="py-20 font-handwritten text-xl tracking-wide">
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div

@@ -15,6 +15,7 @@ export default {
     extend: {
       fontFamily: {
         mono: ["JetBrains Mono", "Fira Code", "Monaco", "Consolas", "monospace"],
+        handwritten: ["var(--font-caveat)", "cursive"],
       },
       colors: {
         border: "hsl(var(--border))",

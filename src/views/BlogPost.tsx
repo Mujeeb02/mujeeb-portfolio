@@ -11,10 +11,13 @@ import { cn } from '@/lib/utils';
 import { BlogComments } from '@/components/BlogComments';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useMarkdownSerializer } from '@/components/dashboard/editor/hooks/useMarkdownSerializer';
+import EditorPreview from '@/components/dashboard/editor/EditorPreview';
 
 const BlogPostPage = ({ slug }: { slug?: string }) => {
   const { getPostBySlug, likePost, unlikePost, isLiked, incrementViews, refresh } = useBlog();
   const [hasIncrementedView, setHasIncrementedView] = useState(false);
+  const { markdownToHtml } = useMarkdownSerializer();
 
   const post = slug ? getPostBySlug(slug) : null;
   const liked = post ? isLiked(post.id) : false;
@@ -85,7 +88,7 @@ const BlogPostPage = ({ slug }: { slug?: string }) => {
   }
 
   return (
-    <article className="py-20">
+    <article className="py-20 font-handwritten text-xl tracking-wide">
       <div className="container mx-auto px-4">
         {/* Back Link */}
         <motion.div
@@ -173,59 +176,9 @@ const BlogPostPage = ({ slug }: { slug?: string }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="max-w-3xl mx-auto prose prose-invert prose-green"
+          className="max-w-3xl mx-auto"
         >
-          <div className="space-y-6 text-muted-foreground leading-relaxed">
-            {post.content.split('\n\n').map((paragraph, index) => {
-              if (paragraph.startsWith('## ')) {
-                return (
-                  <h2 key={index} className="text-xl font-bold text-foreground mt-8 mb-4">
-                    <span className="text-secondary">#</span> {paragraph.slice(3)}
-                  </h2>
-                );
-              }
-              if (paragraph.startsWith('### ')) {
-                return (
-                  <h3 key={index} className="text-lg font-bold text-foreground mt-6 mb-3">
-                    <span className="text-secondary">##</span> {paragraph.slice(4)}
-                  </h3>
-                );
-              }
-              if (paragraph.startsWith('```')) {
-                const lines = paragraph.split('\n');
-                const lang = lines[0].slice(3);
-                const code = lines.slice(1, -1).join('\n');
-                return (
-                  <div key={index} className="my-6">
-                    <div className="bg-terminal-gray border border-border overflow-hidden">
-                      <div className="px-4 py-2 border-b border-border text-xs text-muted-foreground">
-                        {lang || 'code'}
-                      </div>
-                      <pre className="p-4 overflow-x-auto text-sm">
-                        <code className="text-primary">{code}</code>
-                      </pre>
-                    </div>
-                  </div>
-                );
-              }
-              if (paragraph.startsWith('1. ') || paragraph.startsWith('- ')) {
-                const items = paragraph.split('\n');
-                return (
-                  <ul key={index} className="list-none space-y-2 my-4">
-                    {items.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <span className="text-secondary">❯</span>
-                        <span>{item.replace(/^[\d.*-]\s*/, '')}</span>
-                      </li>
-                    ))}
-                  </ul>
-                );
-              }
-              return paragraph.trim() ? (
-                <p key={index}>{paragraph}</p>
-              ) : null;
-            })}
-          </div>
+          <EditorPreview html={markdownToHtml(post.content)} className="!max-w-none text-muted-foreground prose-p:leading-relaxed prose-headings:text-foreground prose-code:text-primary" />
         </motion.div>
 
         <AsciiDivider className="my-12" variant="wave" />
