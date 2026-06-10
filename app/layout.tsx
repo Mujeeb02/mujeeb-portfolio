@@ -40,11 +40,12 @@ export const viewport: Viewport = {
   themeColor: "#00ff00",
 };
 
-import { Caveat } from 'next/font/google';
+import { Patrick_Hand } from 'next/font/google';
 
-const caveat = Caveat({ 
+const handwrittenFont = Patrick_Hand({ 
+  weight: '400',
   subsets: ['latin'],
-  variable: '--font-caveat',
+  variable: '--font-handwritten',
   display: 'swap',
 });
 
@@ -54,7 +55,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={caveat.variable}>
+    <html lang="en" suppressHydrationWarning className={handwrittenFont.variable}>
       <body suppressHydrationWarning>
         <AppProviders>{children}</AppProviders>
       </body>
